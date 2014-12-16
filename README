@@ -17,6 +17,29 @@ In a nutshell, you should
 
  - run ./install.sh -c <CONFIG>
 
+
+Configuration file reference
+----------------------------
+
+Configuration file is just a shell script that will be sourced by
+install.sh and it should provide the following variables:
+
+ - VIRTUALENV_PACKLIST: file with list of PIP packages
+   for virtualenv to be created; relative paths will be
+   interpreted as rooted at settings/ directory.
+
+ - INSTANCE: name of the instance to be installed.
+
+ - USER: name of the user to be created for this instance.
+
+ - UID_GID: UID and GID for instance user;
+
+ - HOMEDIR: home directory for instance user;
+
+ - CHECKOUT_CONF: checkout script that will deliver PanDA monitor
+   sources to the instance.
+
+
 Slightly more advanced stuff
 ----------------------------
 
