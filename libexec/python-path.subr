@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# Creates Python path from the contents of the software
+# installation file.
+
+usage () {
+	cat << EOF
+Usage: $0 base-dir software-list-file
+EOF
+}
+
+if [ -z "$1" ]; then
+	echo "No base directory specified." >&2
+	exit 1
+fi
+if [ "$1" == "-h" ]; then
+	usage
+	exit 0
+fi
+if [ -z  "$2" ]; then
+	echo "No software list file specified." >&2
+	exit 1
+fi
+
+BASEDIR="$1"
+SOFTWARE="$2"
+
+PYTHON_PATH=
+for label in $(awk '!/^[[:space:]]*#/ { print $1; }' "$SOFTWARE"); do
+	path="$BASEDIR"/"$label"
+	if [ -z "$PYTHON_PATH" ]; then
+		PYTHON_PATH="$path"
+	else
+		PYTHON_PATH="${PYTHON_PATH}:${path}"
+	fi
+done
+echo "$PYTHON_PATH"

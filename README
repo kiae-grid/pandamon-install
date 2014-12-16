@@ -1,0 +1,119 @@
+Installation suite for PanDA monitor
+====================================
+
+This suite was created to make PanDA monitor installation
+for development purposes to be easy and reproducible.
+
+In a nutshell, you should
+
+ - adopt the configuration file for your needs
+   (look at cfg/ for examples),
+
+ - possibly modify or create new checkout script
+   (look at settings/*.checkout),
+
+ - [in rare cases] extend PIP requirements list
+   (look at pip-*.list),
+
+ - run ./install.sh -c <CONFIG>
+
+Slightly more advanced stuff
+----------------------------
+
+./install.sh -h will give you the list of default installation steps.
+You can rerun any with ./install.sh -c <CONFIG> <STEP-NAME> <STEP-NAME>.
+
+
+
+Layout
+======
+
+
+Suite files
+-----------
+
+Directory "libexec" contains scripts that drive various parts
+of installation process.  When a new stage is added, install.sh
+should get wrapper for this procedure to pass proper parameters
+to the script.
+
+Directory "templates" holds template files that will be used
+during the installation phase.  You can tune them to your taste
+or create new ones.  When you see something like @@VARIABLE@@
+inside template file, this is the placeholder for the corresponding
+item in the target file.
+
+Directory "settings" contains input files for various stages.
+Currently it holds checkout scripts and PIP requirement files.
+
+
+Installed software
+------------------
+
+For each installation we will create its own user, Python virtualenv
+and standard directory structure under user's directory.  It will
+look like this:
+
+ $HOME
+   |
+   -> src/
+   |   |
+   |   -> shibsso/
+   |   |
+   |   -> panda-bigmon-core/
+   |   |
+   |   -> panda-bigmon-atlas/
+   |
+   -> venv/
+   |   |
+   |   -> <standard virtualenv stuff>
+   |
+   -> settings/
+   |   |
+   |   -> settings_bigpandamon_atlas.py
+   |
+   -> logs/
+
+The idea is to have separate directories (or symlinks to directories)
+with distinct parts of PanDA monitoring to be able to work with
+development repositories without installing anything.  We had also
+separated settings_bigpandamon_atlas.py to their own directory to
+be able to tune environment without disturbing sources.  Ideally,
+local.py from both panda-bigmon-core and panda-bigmon-atlas should
+also go into settings, but we hadn't yet done that (since it will
+be good to depart from Python modules and turn to configuration files
+here).
+
+
+Checkout scripts
+----------------
+
+Each checkout file has line-oriented format.  Lines that start
+with hash ('#') that is possibly preceeded with some whitespace
+are comments.  The rest of the lines hold name of the component
+to install (first word) and shell command that will install the
+component.  It is expected that for each component the directory
+(or symlink) named after the component will be produced under
+$HOME/src/ directory.  These directories will be put into Python
+path for Django in the same order as they appear in checkout
+script.
+
+
+
+Miscellaneous things
+====================
+
+This suite works for ATLAS monitoring part when it is deployed with
+CentOS 6.x and Apache/mod_wsgi.
+
+
+
+TODO
+====
+
+ - There are some hardcoded values like "/etc/httpd/conf.d", "apache",
+   "0640".  They probably should be put into some common configuration
+   file.
+
+ - Currently we can handle only ATLAS.  I feel that minimal changes are
+   needed to handle LSST, but this is to be verified.
