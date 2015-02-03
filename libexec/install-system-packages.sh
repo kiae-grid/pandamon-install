@@ -6,4 +6,4 @@ yum install -y python-pip python-virtualenv \
   httpd mod_wsgi \
   mysql-devel \
   python-devel gcc \
-  libcurl-devel
+  libcurl-devel libev-devel
