@@ -48,7 +48,7 @@ clone_software () {
 }
 
 config_httpd () {
-	"$LIBEXEC"/config-httpd.sh -u "$USER" -i "$INSTANCE" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/httpd-pandamon.conf -e "$EXPERIMENT"
+	"$LIBEXEC"/config-httpd.sh -u "$USER" -i "$INSTANCE" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/httpd-pandamon-"$EXPERIMENT".conf -e "$EXPERIMENT"
 }
 
 config_instance () {
