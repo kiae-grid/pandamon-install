@@ -6,7 +6,7 @@ CONF_D=/etc/httpd/conf.d
 
 usage () {
 	cat << EOF
-Usage: $0 -u username -i instance -s software-list-file -t wsgi-template-file
+Usage: $0 -e experiment -u username -i instance -s software-list-file -t wsgi-template-file
 EOF
 }
 
@@ -20,11 +20,15 @@ USER=
 SOFTWARE=
 TEMPLATE=
 INSTANCE=
-while getopts "hi:s:t:u:" opt; do
+EXPERIMENT=atlas
+while getopts "e:hi:s:t:u:" opt; do
 	case "X$opt" in
 	Xh)
 		usage
 		exit 0
+		;;
+	Xe)
+		EXPERIMENT="$OPTARG"
 		;;
 	Xi)
 		INSTANCE="$OPTARG"
@@ -91,6 +95,7 @@ PYTHON_PATH=$("$MYDIR"/python-path.subr "$INSTANCE_SOFT_BASEDIR" "$SOFTWARE")
 [ "$?" != 0 ] && exit 1
 
 sed -e"s|@@PYTHON_PATH@@|${HOME}/settings:${PYTHON_PATH}|g" \
+    -e"s|@@EXPERIMENT@@|${EXPERIMENT}|g" \
     -e"s|@@INSTANCE@@|${INSTANCE}|g" \
     -e"s|@@INSTANCE_SOFT_BASEDIR@@|${INSTANCE_SOFT_BASEDIR}|g" \
     "$TEMPLATE" > "${CONF_D}/pandamon-${INSTANCE}.conf"

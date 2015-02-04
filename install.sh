@@ -48,11 +48,11 @@ clone_software () {
 }
 
 config_httpd () {
-	"$LIBEXEC"/config-httpd.sh -u "$USER" -i "$INSTANCE" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/httpd-pandamon.conf
+	"$LIBEXEC"/config-httpd.sh -u "$USER" -i "$INSTANCE" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/httpd-pandamon.conf -e "$EXPERIMENT"
 }
 
 config_instance () {
-	"$LIBEXEC"/config-instance.sh -u "$USER" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/settings_bigpandamon_atlas.py
+	"$LIBEXEC"/config-instance.sh -u "$USER" -s "$CHECKOUT_CONF" -t "$TEMPLATES"/settings_bigpandamon_"$EXPERIMENT".py -e "$EXPERIMENT"
 }
 
 
@@ -89,6 +89,7 @@ for i in VIRTUALENV_PACKLIST INSTANCE USER UID_GID HOMEDIR CHECKOUT_CONF; do
 		exit 1
 	fi
 done
+[ -z "$EXPERIMENT" ] && EXPERIMENT="atlas"
 
 
 # Run default actions if no actions were specified.

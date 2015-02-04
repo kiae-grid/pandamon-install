@@ -20,11 +20,15 @@ fi
 USER=
 SOFTWARE=
 TEMPLATE=
-while getopts "hs:t:u:" opt; do
+EXPERIMENT=atlas
+while getopts "e:hs:t:u:" opt; do
 	case "X$opt" in
 	Xh)
 		usage
 		exit 0
+		;;
+	Xe)
+		EXPERIMENT="$OPTARG"
 		;;
 	Xs)
 		SOFTWARE="$OPTARG"
@@ -94,7 +98,7 @@ chown "$USER":"$USER" "$DEST"
 LOGROOT="$HOME"/logs
 # Create empty configuration files if they don't exist.
 for l in panda-bigmon-core/core/common/settings/local.py \
-    panda-bigmon-atlas/atlas/settings/local.py; do
+    panda-bigmon-$EXPERIMENT/$EXPERIMENT/settings/local.py; do
 	lconf="$HOME/src/$l"
 	tpl="$MYDIR/../templates/$(echo "${l#*/}" | tr / -)"
 	if ! [ -e "$tpl" ]; then
@@ -113,10 +117,10 @@ done
 # Extract static files if our source isn't a symlink
 # to some other place (in this case the owner of symlinked
 # contents is responsible for extraction).
-MAIN_CODE="$HOME/src/panda-bigmon-atlas"
+MAIN_CODE="$HOME/src/panda-bigmon-$EXPERIMENT"
 if [ -d "$MAIN_CODE" ]; then
 	activate="$VIRTUALENV_PATH"/bin/activate
-	su -c "source \"${activate}\" || exit 1; cd \"$MAIN_CODE/atlas\"; PYTHONPATH=\"$PYTHON_PATH\" ./manage.py collectstatic -v0 --noinput || exit 1; deactivate" - "$USER" || exit 1
+	su -c "source \"${activate}\" || exit 1; cd \"$MAIN_CODE/$EXPERIMENT\"; PYTHONPATH=\"$PYTHON_PATH\" ./manage.py collectstatic -v0 --noinput || exit 1; deactivate" - "$USER" || exit 1
 	chgrp apache "$LOGROOT"/logfile.*
 fi
 
@@ -127,7 +131,7 @@ cat << EOF
 Two configuration files,
   $HOME/src/panda-bigmon-core/core/common/settings/local.py
 and
-  $HOME/src/panda-bigmon-atlas/atlas/settings/local.py
+  $HOME/src/panda-bigmon-$EXPERIMENT/$EXPERIMENT/settings/local.py
 were put in place, but their contents should be tuned for your
 installation (unless you already did that).
 
