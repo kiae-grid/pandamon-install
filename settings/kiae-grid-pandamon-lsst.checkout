@@ -1,5 +1,5 @@
 shibsso mkdir shibsso && git clone https://github.com/kiae-grid/shibsso shibsso/shibsso
-panda-bigmon-core git clone -b wenaus https://github.com/kiae-grid/panda-bigmon-core panda-bigmon-core
+panda-bigmon-core git clone -b rea/reintegrate-maria-nosql https://github.com/kiae-grid/panda-bigmon-core panda-bigmon-core
 panda-bigmon-atlas git clone https://github.com/kiae-grid/panda-bigmon-atlas panda-bigmon-atlas
-panda-bigmon-lsst git clone -b wenaus https://github.com/kiae-grid/panda-bigmon-lsst panda-bigmon-lsst
+panda-bigmon-lsst git clone -b rea/reintegrate-maria-nosql https://github.com/kiae-grid/panda-bigmon-lsst panda-bigmon-lsst
 pbm git clone https://github.com/jschovan/pbm pbm
